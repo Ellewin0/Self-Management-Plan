@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECU Mentoring Guided Session</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom Colors */
+        :root {
+            --ecu-teal: #66A39B;
+            --ecu-sage: #F2F7F6;
+            --ecu-stone: #D2D8D6;
+            --ecu-deep: #446C67;
+        }
+
+        body {
+            background-color: var(--ecu-sage);
+            color: var(--ecu-deep);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .bg-teal { background-color: var(--ecu-teal); }
+        .text-teal { color: var(--ecu-teal); }
+        .border-stone { border-color: var(--ecu-stone); }
+        .bg-sage { background-color: var(--ecu-sage); }
+
+        /* Print Styles */
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; padding: 0 !important; margin: 0 !important; }
+            .section-card { 
+                page-break-inside: avoid; 
+                margin-bottom: 2rem; 
+                border: 1px solid var(--ecu-stone); 
+                padding: 1.5rem; 
+                border-radius: 1rem;
+            }
+            @page { size: A4; margin: 20mm; }
+        }
+
+        .print-only { display: none; }
+
+        /* UI Transitions */
+        .step-content { display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+
+    <!-- NAVIGATION HEADER -->
+    <header class="no-print bg-white border-b border-stone py-4 px-6 sticky top-0 z-10 shadow-sm">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-teal rounded-xl text-white">
+                    <i data-lucide="leaf"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight">Guided Session</h1>
+                    <p class="text-[10px] font-black text-teal uppercase tracking-widest">ECU Mentoring Tool</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-teal transition-all duration-500" style="width: 14.28%;"></div>
+                </div>
+                <span id="progress-text" class="text-xs font-bold">1/7</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE AREA -->
+    <main class="no-print max-w-6xl mx-auto px-6 py-8 md:py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT: MENTOR GUIDE -->
+            <aside class="lg:col-span-4">
+                <div class="bg-white p-6 rounded-[2rem] border border-stone shadow-sm">
+                    <div class="flex items-center gap-2 mb-4 text-teal">
+                        <i data-lucide="info" class="w-4 h-4"></i>
+                        <h3 class="font-bold uppercase text-[10px] tracking-widest">Mentor Guidelines</h3>
+                    </div>
+                    <h4 id="guide-title" class="text-xl font-bold mb-3">Getting Started</h4>
+                    <p id="guide-text" class="text-sm leading-relaxed opacity-80 mb-6">
+                        Explain that this plan belongs to the student. It is a "living document" that helps them feel empowered during stressful moments.
+                    </p>
+                    <div class="p-4 bg-sage rounded-2xl border border-stone">
+                        <p class="text-[10px] font-black uppercase text-teal mb-1">Observation Tip</p>
+                        <p class="text-xs leading-relaxed italic opacity-70">
+                            Observe non-verbal cues. If the student seems strained, suggest a pause.
+                        </p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT: FORM AREA -->
+            <div class="lg:col-span-8">
+                <div class="bg-white p-8 md:p-10 rounded-[2.5rem] border border-stone shadow-xl shadow-stone/20 min-h-[500px] flex flex-col">
+                    
+                    <div id="steps-container">
+                        <!-- Step 1: Names -->
+                        <div class="step-content active" data-step="0" data-title="Getting Started" data-guide="Begin by creating a safe space. Ask: 'How are you feeling today?' and ensure they know they are in control of this session.">
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-teal mb-3">Student Name</label>
+                            <input type="text" id="studentName" class="w-full p-4 bg-sage rounded-2xl mb-6 outline-none border-2 border-transparent focus:border-teal" placeholder="Enter student name...">
+                            
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-teal mb-3">Mentor Name</label>
+                            <input type="text" id="mentorName" class="w-full p-4 bg-sage rounded-2xl outline-none border-2 border-transparent focus:border-teal" placeholder="Enter mentor name...">
+                        </div>
+
+                        <!-- Step 2: Triggers -->
+                        <div class="step-content" data-step="1" data-title="Identifying Triggers" data-guide="Ask: 'What does a difficult day look like for you? Are there specific sounds, changes, or social situations that feel draining?'">
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-teal mb-3">My Triggers</label>
+                            <textarea id="triggers" rows="8" class="w-full p-4 bg-sage rounded-2xl outline-none border-2 border-transparent focus:border-teal resize-none text-sm" placeholder="e.g., Loud hallways, unexpected schedule changes..."></textarea>
+                        </div>
+
+                        <!-- Step 3: Signs -->
+                        <div class="step-content" data-step="2" data-title="Warning Signs" data-guide="Guide them to think about body sensations: 'Do you feel restless? Does your heart speed up? Do you find it harder to focus?'">
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-teal mb-3">Warning Signs</label>
+                            <textarea id="warningSigns" rows="8" class="w-full p-4 bg-sage rounded-2xl outline-none border-2 border-transparent focus:border-teal resize-none text-sm" placeholder="e.g., Clenching jaw, feeling 'foggy', wanting to leave..."></textarea>
+                        </div>
+
+                        <!-- Step 4: Strategies -->
+                        <div class="step-content" data-step="3" data-title="Coping Strategies" data-guide="Focus on regulation. Ask: 'What helps you feel 10% more grounded in the moment?'">
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-teal mb-3">Coping Strategies</label>
+                            <textarea id="copingStrategies" rows="8" class="w-full p-4 bg-sage rounded-2xl outline-none border-2 border-transparent focus:border-teal resize-none text-sm" placeholder="e.g., Noise-cancelling headphones, 4-7-8 breathing..."></textarea>
+                        </div>
+
+                        <!-- Step 5: Support -->
+                        <div class="step-content" data-step="4" data-title="Support Squad" data-guide="Help them list specific people. 'Who can you call if you feel you cannot manage a situation alone?'">
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-teal mb-3">My Contacts</label>
+                            <textarea id="supportSquad" rows="8" class="w-full p-4 bg-sage rounded-2xl outline-none border-2 border-transparent focus:border-teal resize-none text-sm" placeholder="Name / Contact Info..."></textarea>
+                        </div>
+
+                        <!-- Step 6: Wellness -->
+                        <div class="step-content" data-step="5" data-title="Wellness Routine" data-guide="This is prevention. Ask: 'What are the daily activities that keep your baseline stress low?'">
+                            <label class="block text-[10px] font-black uppercase tracking-widest text-teal mb-3">Wellness Habits</label>
+                            <textarea id="wellnessRoutine" rows="8" class="w-full p-4 bg-sage rounded-2xl outline-none border-2 border-transparent focus:border-teal resize-none text-sm" placeholder="e.g., Daily walk, consistent sleep, quiet reading time..."></textarea>
+                        </div>
+
+                        <!-- Step 7: Final Review -->
+                        <div class="step-content" data-step="6" data-title="Final Review" data-guide="Read through the summary together. Remind the student they can change this any time.">
+                            <div class="bg-sage p-6 rounded-3xl border border-stone space-y-4">
+                                <div id="summary-area" class="text-sm space-y-4 max-h-[300px] overflow-y-auto pr-2">
+                                    <!-- Summary populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FOOTER BUTTONS -->
+                    <div class="mt-auto pt-8 flex justify-between items-center border-t border-stone">
+                        <button id="prevBtn" class="flex items-center gap-2 px-6 py-3 font-bold text-xs opacity-0 pointer-events-none transition-all hover:bg-sage rounded-xl">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i> Previous
+                        </button>
+                        <div class="flex gap-2">
+                            <button id="copyBtn" class="hidden flex items-center gap-2 px-6 py-3 border-2 border-teal text-teal rounded-xl font-bold text-xs hover:bg-sage">
+                                <i data-lucide="copy" class="w-4 h-4"></i> Copy Text
+                            </button>
+                            <button id="nextBtn" class="flex items-center gap-2 px-10 py-4 bg-teal text-white rounded-2xl font-bold text-sm shadow-xl shadow-teal/30 hover:scale-105 active:scale-95 transition-all">
+                                Continue <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PRINT DOCUMENT (Hidden on screen) -->
+    <div id="print-area" class="print-only p-10">
+        <div class="flex justify-between items-end border-b-4 border-teal pb-8 mb-10">
+            <div>
+                <h1 class="text-4xl font-black text-gray-800">Self-Management Plan</h1>
+                <p class="text-xl font-bold text-teal tracking-widest uppercase">ECU Neurodivergent Mentoring</p>
+            </div>
+            <div class="text-right text-sm">
+                <p><strong>Student:</strong> <span id="print-student"></span></p>
+                <p><strong>Mentor:</strong> <span id="print-mentor"></span></p>
+                <p><strong>Date:</strong> <span id="print-date"></span></p>
+            </div>
+        </div>
+        <div id="print-content" class="space-y-8">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <script>
+        // Initializing Lucide Icons
+        lucide.createIcons();
+
+        let currentStep = 0;
+        const totalSteps = 7;
+        const steps = document.querySelectorAll('.step-content');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const guideTitle = document.getElementById('guide-title');
+        const guideText = document.getElementById('guide-text');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const summaryArea = document.getElementById('summary-area');
+
+        function updateUI() {
+            // Update Visibility
+            steps.forEach((s, idx) => {
+                s.classList.toggle('active', idx === currentStep);
+            });
+
+            // Update Sidebar
+            const activeStep = steps[currentStep];
+            guideTitle.innerText = activeStep.getAttribute('data-title');
+            guideText.innerText = activeStep.getAttribute('data-guide');
+
+            // Update Progress
+            const perc = ((currentStep + 1) / totalSteps) * 100;
+            progressBar.style.width = perc + '%';
+            progressText.innerText = `${currentStep + 1}/${totalSteps}`;
+
+            // Update Buttons
+            prevBtn.style.opacity = currentStep === 0 ? '0' : '1';
+            prevBtn.style.pointerEvents = currentStep === 0 ? 'none' : 'auto';
+
+            if (currentStep === totalSteps - 1) {
+                nextBtn.innerHTML = '<i data-lucide="download" class="w-4 h-4"></i> Export PDF';
+                copyBtn.classList.remove('hidden');
+                generateSummary();
+            } else {
+                nextBtn.innerHTML = 'Continue <i data-lucide="arrow-right" class="w-4 h-4"></i>';
+                copyBtn.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        function generateSummary() {
+            const fields = [
+                { id: 'triggers', label: 'Triggers' },
+                { id: 'warningSigns', label: 'Warning Signs' },
+                { id: 'copingStrategies', label: 'Coping Strategies' },
+                { id: 'supportSquad', label: 'Support Squad' },
+                { id: 'wellnessRoutine', label: 'Wellness Routine' }
+            ];
+
+            let html = '';
+            fields.forEach(f => {
+                const val = document.getElementById(f.id).value || 'Not entered...';
+                html += `<div class="mb-4"><p class="text-[10px] font-black uppercase text-teal mb-1">${f.label}</p><p class="italic text-gray-600">${val}</p></div>`;
+            });
+            summaryArea.innerHTML = html;
+        }
+
+        function preparePrint() {
+            document.getElementById('print-student').innerText = document.getElementById('studentName').value || '—';
+            document.getElementById('print-mentor').innerText = document.getElementById('mentorName').value || '—';
+            document.getElementById('print-date').innerText = new Date().toLocaleDateString();
+
+            const sections = [
+                { label: 'My Triggers', id: 'triggers' },
+                { label: 'Warning Signs', id: 'warningSigns' },
+                { label: 'Coping Strategies', id: 'copingStrategies' },
+                { label: 'Support Squad', id: 'supportSquad' },
+                { label: 'Wellness Routine', id: 'wellnessRoutine' }
+            ];
+
+            let html = '';
+            sections.forEach(s => {
+                const val = document.getElementById(s.id).value || 'No entry provided.';
+                html += `
+                    <div class="section-card">
+                        <h2 class="text-lg font-black text-gray-700 uppercase tracking-widest border-l-4 border-teal pl-4 mb-4">${s.label}</h2>
+                        <div class="text-sm leading-relaxed p-4 bg-gray-50 rounded-xl border border-gray-100 whitespace-pre-wrap">${val}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('print-content').innerHTML = html;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep === totalSteps - 1) {
+                preparePrint();
+                window.print();
+            } else {
+                currentStep++;
+                updateUI();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentStep--;
+            updateUI();
+        });
+
+        copyBtn.addEventListener('click', () => {
+            const student = document.getElementById('studentName').value;
+            const mentor = document.getElementById('mentorName').value;
+            let text = `ECU SELF-MANAGEMENT PLAN\nStudent: ${student}\nMentor: ${mentor}\n\n`;
+            
+            const fields = ['triggers', 'warningSigns', 'copingStrategies', 'supportSquad', 'wellnessRoutine'];
+            fields.forEach(f => {
+                text += `${f.toUpperCase()}:\n${document.getElementById(f).value}\n\n`;
+            });
+
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            copyBtn.innerText = 'Copied!';
+            setTimeout(() => {
+                copyBtn.innerHTML = '<i data-lucide="copy" class="w-4 h-4"></i> Copy Text';
+                lucide.createIcons();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
